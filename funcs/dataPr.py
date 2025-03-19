@@ -1,7 +1,12 @@
 import torch
 import torchvision.transforms as vis_trans
 from PIL import Image
-        
+import json
+import numpy as np
+
+from mainF.dp import max_index
+
+
 def imgToTensor(imgSize):
     transList = [
             vis_trans.Resize(imgSize),
@@ -44,7 +49,7 @@ class MyImgDataClass():
         (self.w,self.h)=ori.size
 
         maskTensor=self.getImgTensor("mask")
-        self.maskFlag=((maskTensor>0)[0,0,:])#shape:(h,w)
+        self.maskFlag=((maskTensor>0)[0,0,:])
 
     def getImg(self, imgName):
         imgPath=self.root+self.imgDict[imgName]
@@ -60,7 +65,6 @@ class MyImgDataClass():
         imgTrans=imgToTensor((h,w))
         imgTensor=imgTrans(img)
         return imgTensor[None,].to(self.device)#shape:(batch:1, dim, h, w)
-
     def byMask(self, img, ifMain=True):
         if ifMain:
             img[:,:,~self.maskFlag]=0
@@ -78,13 +82,24 @@ class MyImgDataClass():
 
         uvByMask=self.byMask(scaled_data)
         return uvByMask
+
+    def getPreUV(self,):
+        with open('normal_reUV-main/funcs/img1Json.json', 'r', encoding='utf-8') as f:
+            json_str = f.read()
+        data = json.loads(json_str)
+        data = json.loads(data)
+        scores = data["scores"]
+        max_index=np.argmax(scores)
+        uv_data = data["pred_densepose"][max_index]['uv']
+        uv_tensor = torch.tensor(uv_data).float()
+        preUv=uv_tensor
+        return preUv
+
+
+
+
     
-    def getPreUV(self, ):
-        #from densepose
-        preUV=self.initUV()
-        return preUV
-    
-    def uvReplace(self, newUV):
+    def uvReplace(self, newUV):#根据 UV 映射从纹理图像中采样像素，替换原始图像中的对应区域。
         minSize=min(self.h,self.w)
 
         texture=self.getImgTensor("texture", minSize, minSize)
