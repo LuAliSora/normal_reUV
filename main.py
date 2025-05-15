@@ -56,7 +56,7 @@ def main():
     device=torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     imgDataset=dataPr.MyImgDataClass(args.oriImg, args.textureImg, device)
 
-    model, baseEpoch=modelLoad(imgDataset.root+args.model_from)
+    model, baseEpoch=modelLoad(imgDataset.modelFolder+args.model_from)
     model=model.to(device)    
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, amsgrad=True)
 

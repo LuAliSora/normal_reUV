@@ -45,8 +45,8 @@ class MyImgDataClass():
     def __init__(self, oriName, textureName, device):
         self.device=device
         self.root="dataset/"
-        self.modelFolder="models/"
-        createFolder((self.root+self.modelFolder))
+        self.modelFolder=self.root+"models/"
+        createFolder(self.modelFolder)
 
         self.oriName=oriName
         self.resImg=f"{oriName}_by_{textureName}.jpg"
@@ -132,7 +132,7 @@ class MyImgDataClass():
     
     def saveModel(self, epoch, model):
         modelName=f"epoch{epoch}_{self.oriName}.pth"
-        savePath = self.root + self.modelFolder+ modelName
+        savePath = self.modelFolder+ modelName
         torch.save({"epoch": epoch,
                     "model_state": model.state_dict()
                     }, savePath)
