@@ -45,7 +45,7 @@ class MyImgDataClass():
     def __init__(self, oriName, textureName, device):
         self.device=device
         self.root="dataset/"
-        self.modelFolder=self.root+"models/"
+        self.modelFolder=self.root+"modelSave/"
         createFolder(self.modelFolder)
 
         self.oriName=oriName
