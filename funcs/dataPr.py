@@ -3,6 +3,7 @@ import torchvision.transforms as vis_trans
 from PIL import Image
 import json
 import numpy as np
+from pathlib import Path
         
 
 def imgToTensor(imgSize=None):
@@ -35,10 +36,17 @@ def dataN(raw):
     return scaled
 
 
+def createFolder(folder:str):
+    temp=Path(folder)
+    temp.mkdir(exist_ok=True, parents=True)
+    
+    
 class MyImgDataClass():
     def __init__(self, oriName, textureName, device):
         self.device=device
         self.root="dataset/"
+        self.modelFolder="models/"
+        createFolder((self.root+self.modelFolder))
 
         self.oriName=oriName
         self.resImg=f"{oriName}_by_{textureName}.jpg"
@@ -124,7 +132,7 @@ class MyImgDataClass():
     
     def saveModel(self, epoch, model):
         modelName=f"epoch{epoch}_{self.oriName}.pth"
-        savePath = self.root + modelName
+        savePath = self.root + self.modelFolder+ modelName
         torch.save({"epoch": epoch,
                     "model_state": model.state_dict()
                     }, savePath)
