@@ -37,7 +37,7 @@ def uv_normal_loss(uv, normal, pre_uv):
     return loss_fin
 
 
-def train_main(imgDataset, model, updater, num_epochs, baseEpoch):
+def train_main(imgDataset, model, updater, num_epochs, baseEpoch, save_per):
     # uv=imgDataset.initUV()
     uv=imgDataset.getPreUV_Mask()
     normal=imgDataset.getImgTensor("normal", imgDataset.oriSize)
@@ -54,7 +54,7 @@ def train_main(imgDataset, model, updater, num_epochs, baseEpoch):
         loss.backward()
         updater.step()
 
-        if(epoch%100==0 or epoch==num_epochs-1):
+        if(epoch%save_per==0 or epoch==num_epochs-1):
             epochSum=baseEpoch+epoch+1
             print("Epoch:", epochSum)
             print("Train_loss",loss)

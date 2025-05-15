@@ -14,18 +14,23 @@ def get_args() -> argparse.Namespace:
     parser.add_argument(
         "--numWk",
         type=int,
-        default=8,
+        default=16,
         help="num_workers"
     )
     parser.add_argument(
         "--lr",
         type=float,
-        default=0.5
+        default=0.9
     )
     parser.add_argument(
         "--epoch",
         type=int,
         default=1
+    )
+    parser.add_argument(
+        "--save_per",
+        type=int,
+        default=1000
     )
     parser.add_argument(
         "--model_from",
@@ -55,7 +60,7 @@ def main():
     model=model.to(device)    
     optimizer = torch.optim.Adam(model.parameters(), lr=args.lr, amsgrad=True)
 
-    resUV=train.train_main(imgDataset, model, optimizer, args.epoch, baseEpoch)
+    resUV=train.train_main(imgDataset, model, optimizer, args.epoch, baseEpoch, args.save_per)
     imgDataset.uvReplace(resUV)
 
 
