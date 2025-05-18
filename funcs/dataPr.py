@@ -130,11 +130,12 @@ class MyImgDataClass():
         return preUV_byMask.to(self.device)
     
     
-    def saveModel(self, epoch, model):
+    def saveModel(self, epoch, model, loss):
         modelName=f"epoch{epoch}_{self.oriName}.pth"
         savePath = self.modelFolder+ modelName
         torch.save({"epoch": epoch,
-                    "model_state": model.state_dict()
+                    "model_state": model.state_dict(),
+                    "loss": loss,
                     }, savePath)
         
     

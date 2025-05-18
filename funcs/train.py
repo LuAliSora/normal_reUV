@@ -58,6 +58,6 @@ def train_main(imgDataset, model, updater, num_epochs, baseEpoch, save_per):
             epochSum=baseEpoch+epoch+1
             print("Epoch:", epochSum)
             print("Train_loss",loss)
-            imgDataset.saveModel(epochSum, model)
+            imgDataset.saveModel(epochSum, model, loss)
     return resUV_Mask
         

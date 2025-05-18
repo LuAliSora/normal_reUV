@@ -48,7 +48,8 @@ def modelLoad(fileSave):
         saveState=torch.load(fileSave, weights_only=True)
         model.load_state_dict(saveState['model_state'])
         baseEpoch=saveState["epoch"]
-        print("Model_Load! BaseEpoch:",baseEpoch)
+        loss=saveState["loss"]
+        print(f"Model_Load! BaseEpoch: {baseEpoch}, Loss: {loss}")
     return model, baseEpoch
 
 def main():
