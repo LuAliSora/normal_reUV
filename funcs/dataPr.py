@@ -40,7 +40,13 @@ def createFolder(folder:str):
     temp=Path(folder)
     temp.mkdir(exist_ok=True, parents=True)
     
+
+def saveImg(imgTensor, imgPath):
+    tensorTrans=tensorToImg()
+    img=tensorTrans(imgTensor[0])
+    img.save(imgPath)
     
+
 class MyImgDataClass():
     def __init__(self, oriName, textureName, device):
         self.device=device
@@ -49,7 +55,11 @@ class MyImgDataClass():
         createFolder(self.modelFolder)
 
         self.oriName=oriName
-        self.resImg=f"{oriName}_by_{textureName}.jpg"
+
+        tempDict={}
+        tempDict["retTexture"]=f"{textureName}_re_{oriName}.jpg"
+        tempDict["resImg"]=f"{oriName}_by_{textureName}.jpg"
+        self.resDict=tempDict
 
         tempDict={}
         tempDict["origin"]=f"{oriName}.jpg"
@@ -142,6 +152,7 @@ class MyImgDataClass():
     def uvReplace(self, newUV):
         minSize=min(self.cropSize)
         texture=self.getImgTensor("texture", re_wh=(minSize, minSize), ifCrop=False)
+        saveImg(texture, (self.root+self.resDict["retTexture"]))
 
         newUV=newUV*(minSize-1)
         u=newUV[0,0,:].long()
@@ -153,14 +164,5 @@ class MyImgDataClass():
         after[0,:]=texture[0, :, u, v]
         
         res=self.byMask(after)+self.byMask(ori, False)
-        self.saveResImg(res)
+        saveImg(res, (self.root+self.resDict["resImg"]))
 
-
-    def saveResImg(self, imgTensor):
-        tensorTrans=tensorToImg()
-        img=tensorTrans(imgTensor[0])
-        img.save(self.root+self.resImg)
-
-
-
-               
