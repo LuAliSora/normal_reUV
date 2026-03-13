@@ -7,7 +7,7 @@ from modelscope.utils.constant import Tasks
 import argparse
 from pathlib import Path
 
-from torch.utils import data
+# from torch.utils import data
 
 from tqdm import tqdm
 
@@ -35,12 +35,11 @@ def main():
     args=get_args()
 
     myImgSet=ImgSet(Path(args.inputDir), Path(args.outputDir))
-    imgloader=data.DataLoader(myImgSet)
 
     model_id = 'Damo_XR_Lab/cv_human_monocular-normal-estimation'
     estimator = pipeline(Tasks.human_normal_estimation, model=model_id)
 
-    for inPath, outPath  in tqdm(imgloader):
+    for inPath, outPath  in tqdm(myImgSet):
         result = estimator(str(inPath))
         normals_vis = result[OutputKeys.NORMALS_COLOR]
         cv2.imwrite(str(outPath), normals_vis)
