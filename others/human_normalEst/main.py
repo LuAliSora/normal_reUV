@@ -44,6 +44,7 @@ def main():
         result = estimator(str(inPath))
         normals_vis = result[OutputKeys.NORMALS_COLOR]
         cv2.imwrite(str(outPath), normals_vis)
+        
 
 if __name__ == '__main__':
     main()
