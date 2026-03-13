@@ -19,7 +19,7 @@ class ImgSet(data.Dataset):
         self.outputDir=resFolder
 
         imgList=[img.name for img in imgFolder.glob('*.jpg')]
-        resList=[img.name for img in f.glob('*.jpg')]
+        resList=[img.name for img in resFolder.glob('*.jpg')]
         self.genList=list(set(imgList) - set(resList))
 
     def __getitem__(self, index):
